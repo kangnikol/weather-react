@@ -13,7 +13,7 @@ const Modal = () => {
   return (
     <>
       <button
-        className="inline-flex py-2 px-4 items-center gap-3 rounded-full text-text/100 hover:opacity-100 opacity-90 bg-surface0 transition-all active:transform active:-scale-x-90 active:-scale-y-90"
+        className="inline-flex py-2 px-4 items-center gap-3 rounded-full text-text/100 hover:opacity-100 opacity-90 bg-surface0 transition-all active:transform active:scale-x-90 active:scale-y-90"
         onClick={openModal}
       >
         <svg
