@@ -14,7 +14,6 @@ const App = () => {
   const handleInputChange = (e) => {
     setInputValue(e.target.value)
   }
-
   const capitalizedInput = inputValue.replace(/^\w/, (e) => e.toUpperCase())
 
   const handleKeyPress = (e) => {
@@ -39,11 +38,11 @@ const App = () => {
       value: weather ? `${weather.wind.speed}` : "0",
       metric: "mph",
     },
-    {
-      icon: <FaUmbrella />,
-      value: weather ? `${weather.rain["1h"]}` : "0",
-      metric: "mm",
-    },
+    // {
+    //   icon: <FaUmbrella />,
+    //   value: weather ? `${weather.rain["1h"]}` : "0",
+    //   metric: "mm",
+    // },
     {
       icon: <FaTint />,
       value: weather ? `${weather.main.humidity}` : "0",
