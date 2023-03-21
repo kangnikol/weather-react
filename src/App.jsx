@@ -4,7 +4,8 @@ import { FaTint, FaUmbrella, FaWind } from "react-icons/fa"
 import Footer from "./Footer"
 
 const apiURL = "https://api.openweathermap.org/data/2.5/weather"
-const apiKEY = process.env.VITE_API_KEY
+const apiKEY = process.env.REACT_APP_API_KEY
+console.log(apiKEY)
 
 const App = () => {
   const [inputValue, setInputValue] = useState("")
