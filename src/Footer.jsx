@@ -1,7 +1,21 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import Modal from "./Modal"
+import { Switch } from "@headlessui/react"
 
 const Footer = () => {
+  const [mode, setMode] = useState(false)
+  useEffect(() => {
+    if (mode) {
+      document.documentElement.classList.add("dark:latte")
+    } else {
+      document.documentElement.classList.remove("dark:latte")
+    }
+  }, [mode])
+
+  const handleToggle = () => {
+    setMode(!mode)
+  }
+
   return (
     <>
       <div className="absolute bottom-0">
@@ -15,7 +29,24 @@ const Footer = () => {
           <div className="opacity-50 text-subtext0">
             © Nicholas Alvi S, 2023
           </div>
-          <Modal />
+          <div className="flex gap-4 items-center">
+            <Switch
+              checked={mode}
+              onChange={handleToggle}
+              className={`${mode ? "bg-base" : "bg-base"} ${
+                mode ? "dark:bg-surface0" : "dark:bg-surface0"
+              } relative inline-flex items-center h-6 rounded-full w-11`}
+            >
+              <span
+                className={`${
+                  mode ? "translate-x-6" : "translate-x-1"
+                } inline-block w-4 h-4 transform ${
+                  mode ? "dark:bg-text" : "bg-text"
+                } rounded-full`}
+              />
+            </Switch>
+            <Modal />
+          </div>
         </footer>
       </div>
     </>

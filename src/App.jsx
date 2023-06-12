@@ -8,7 +8,6 @@ const apiKEY = import.meta.env.VITE_API_KEY
 
 const App = () => {
   const [inputValue, setInputValue] = useState("")
-
   const [weather, setWeather] = useState(null)
 
   const handleInputChange = (e) => {
@@ -23,7 +22,6 @@ const App = () => {
           params: { q: capitalizedInput, units: "metric", appid: apiKEY },
         })
         setWeather(res.data)
-
         if (res.data.cod === "400") {
           setInputValue("")
         }
@@ -38,11 +36,11 @@ const App = () => {
       value: weather ? `${weather.wind.speed}` : "0",
       metric: "mph",
     },
-    // {
-    //   icon: <FaUmbrella />,
-    //   value: weather ? `${weather.rain["1h"]}` : "0",
-    //   metric: "mm",
-    // },
+    {
+      icon: <FaUmbrella />,
+      value: weather && weather.rain ? `${weather.rain["1h"]}` : "0",
+      metric: "mm",
+    },
     {
       icon: <FaTint />,
       value: weather ? `${weather.main.humidity}` : "0",
