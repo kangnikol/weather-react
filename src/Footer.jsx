@@ -4,16 +4,13 @@ import { Switch } from "@headlessui/react"
 
 const Footer = () => {
   const [mode, setMode] = useState(false)
+
   useEffect(() => {
-    if (mode) {
-      document.documentElement.classList.add("dark:latte")
-    } else {
-      document.documentElement.classList.remove("dark:latte")
-    }
+    document.documentElement.classList.toggle("dark:latte", mode)
   }, [mode])
 
   const handleToggle = () => {
-    setMode(!mode)
+    setMode((prevMode) => !prevMode)
   }
 
   return (
