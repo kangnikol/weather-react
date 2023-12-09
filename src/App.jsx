@@ -75,11 +75,19 @@ const App = () => {
       <div className="absolute py-8 left-1/2">
         <div className="relative -left-1/2 text-center">
           <span>Weather App </span>
-          <p className="text-xs text-overlay0">
-            (everyone knows but I don't know the name of this)
-          </p>
-          <p className="mt-4 text-sm text-overlay0">
-            with OpenWeatherMap API & Catppuccin's Theme &#9825;
+          <p className="mt-2 text-sm text-overlay0">
+            with{" "}
+            <a className="text-teal" href="https://openweathermap.org/api/">
+              OpenWeatherMap API
+            </a>{" "}
+            &{" "}
+            <a
+              className="text-teal"
+              href="https://github.com/catppuccin/catppuccin"
+            >
+              Catppuccin
+            </a>
+            's Theme &#9825;
           </p>
         </div>
       </div>
