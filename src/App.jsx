@@ -80,7 +80,7 @@ const App = () => {
             <a className="text-teal" href="https://openweathermap.org/api/">
               OpenWeatherMap API
             </a>{" "}
-            &
+            &{" "}
             <a
               className="text-teal"
               href="https://github.com/catppuccin/catppuccin"
