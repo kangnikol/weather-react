@@ -65,8 +65,8 @@ const App = () => {
   const weatherDescription = useMemo(() => {
     if (!weather) return "Cloudy"
     return (
-      ` ${weather.weather[0].description}`.charAt(0).toUpperCase() +
-      `${weather.weather[0].description}`.slice(0)
+      ` ${weather.weather[0].description}`.charAt(1).toUpperCase() +
+      `${weather.weather[0].description}`.slice(1)
     )
   }, [weather])
 
