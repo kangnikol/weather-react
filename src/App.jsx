@@ -66,7 +66,7 @@ const App = () => {
     if (!weather) return "Cloudy"
     return (
       ` ${weather.weather[0].description}`.charAt(0).toUpperCase() +
-      `${weather.weather[0].description}`.slice(1)
+      `${weather.weather[0].description}`.slice(0)
     )
   }, [weather])
 
