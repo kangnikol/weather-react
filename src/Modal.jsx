@@ -9,87 +9,83 @@ const Modal = () => {
   return (
     <>
       <button
-        className="inline-flex py-2 px-4 items-center gap-3 rounded-full text-text/100 hover:opacity-100 opacity-90 bg-surface0 transition-all active:transform active:scale-x-90 active:scale-y-90"
+        className="text-xs uppercase tracking-widest text-text hover:text-teal transition-colors flex items-center gap-2 group relative"
         onClick={openModal}
       >
-        <svg
-          data-src="https://s2.svgbox.net/materialui.svg?ic=mail"
-          width="16"
-          height="16"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="currentColor"
-          color=""
-          data-id="svg-loader_9"
-        >
-          <path d="M0 0h24v24H0z" fill="none" />
-          <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
-        </svg>
-        Contact Me
+        <span>Contact</span>
+        <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-teal transition-all duration-300 group-hover:w-full"></span>
       </button>
 
       {showModal && (
-        <div className="fixed h-screen w-screen overflow-hidden z-auto top-0 left-0 bottom-0 right-0 opacity-100 backdrop-blur-2xl astro-A4YOCCPA">
-          <div className="relative mx-4 opacity-100 h-screen w-screen rounded-3xl transition-all duration-300 ease-in-out border-base flex items-center astro-A4YOCCPA">
-            <div className="max-w-3xl lg:mx-auto mr-8 text-text astro-A4YOCCPA">
-              <div className="text-3xl font-black text-primary astro-A4YOCCPA">
-                Get In Touch
-              </div>
-              <div
-                className="absolute right-8 top-8 text-text items-center gap-2 flex astro-A4YOCCPA"
-                onClick={closeModal}
-              >
-                <span className="bg-lavender opacity-50 hover:opacity-100 text-crust text-xs px-2 py-1 rounded lg:block astro-A4YOCCPA cursor-pointer">
-                  esc
-                </span>
-                <svg
-                  data-src="https://s2.svgbox.net/materialui.svg?ic=close"
-                  width="24"
-                  height="24"
-                  id="close"
-                  className="hover:text-text cursor-pointer astro-A4YOCCPA"
-                />
+        <div className="fixed h-screen w-screen overflow-hidden z-[100] top-0 left-0 bottom-0 right-0 backdrop-blur-sm bg-base/50 flex items-center justify-center">
+          <div className="relative mx-4 w-full max-w-2xl bg-base border border-surface2 shadow-2xl rounded-sm p-8 md:p-12 transition-all duration-300">
+            <div className="w-full text-text">
+              <div className="flex justify-between items-start mb-8">
+                  <h2 className="text-4xl font-bold text-text tracking-tight">
+                    Get In Touch
+                  </h2>
+                  <button 
+                    onClick={closeModal}
+                    className="text-subtext0 hover:text-text transition-colors"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="square"
+                      strokeLinejoin="miter"
+                    >
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                      <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                  </button>
               </div>
 
               <form
                 action="https://formspree.io/f/meqderqp"
                 method="POST"
-                className="astro-A4YOCCPA"
+                className="flex flex-col gap-6"
               >
-                <p className="mt-2 text-text astro-A4YOCCPA">
+                <p className="text-lg text-subtext0">
                   Do you have an interesting job opportunity? Want to ask me a
-                  question? Or, just want to connect? Feel free to contact me.
+                  question? Or, just want to connect?
                 </p>
 
-                <div className="lg:flex-row flex-col flex mt-6 gap-4 astro-A4YOCCPA">
+                <div className="flex flex-col md:flex-row gap-6">
                   <input
                     required
                     name="name"
                     type="text"
-                    className="flex-1 bg-mantle p-3 rounded outline-none placeholder:text-text text-input text-lg w-auto lg:w-64 border border-lavender astro-A4YOCCPA"
-                    placeholder="Full Name"
+                    className="flex-1 bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors rounded-none"
+                    placeholder="FULL NAME"
                   />
 
                   <input
                     required
                     name="email"
                     type="email"
-                    className="flex-1 bg-mantle p-3 rounded outline-none placeholder:text-text text-input text-lg w-auto lg:w-64 border border-lavender astro-A4YOCCPA"
-                    placeholder="Email"
+                    className="flex-1 bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors rounded-none"
+                    placeholder="EMAIL"
                   />
                 </div>
                 <textarea
                   required
                   name="message"
-                  className="w-full bg-mantle p-3 rounded outline-none placeholder:text-text text-input mt-4 resize-none h-64 text-lg border border-lavender astro-A4YOCCPA"
-                  placeholder="Message"
+                  className="w-full bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors h-32 resize-none rounded-none"
+                  placeholder="MESSAGE"
                 />
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-3 rounded-lg bg-lavender opacity-50 py-3 px-5 text-sm leading-5 font-semibold text-crust transition-all hover:opacity-100 active:scale-95 active:transform-none mt-4 astro-A4YOCCPA"
-                >
-                  Send
-                </button>
+                <div className="flex justify-end mt-4">
+                    <button
+                    type="submit"
+                    className="bg-text text-base px-8 py-3 text-sm uppercase tracking-widest font-bold hover:bg-teal transition-colors"
+                    >
+                    Send Message
+                    </button>
+                </div>
               </form>
             </div>
           </div>

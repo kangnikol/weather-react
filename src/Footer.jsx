@@ -15,34 +15,33 @@ const Footer = () => {
 
   return (
     <>
-      <div className="absolute bottom-0">
-        <div className="flex justify-center lg:mt-12">
-          <img
-            src="https://raw.githubusercontent.com/catppuccin/catppuccin/main/assets/footers/gray0_ctp_on_line.svg?sanitize=true"
-            alt="catppuccin's Cat"
-          />
-        </div>
-        <footer className="text-base text-white px-4 max-w-3xl w-full flex justify-between mx-auto items-center mb-12">
-          <div className="opacity-50 text-subtext0">
-            © Nicholas Alvi S, 2023
-          </div>
-          <div className="flex gap-4 items-center">
+      <div className="w-full mt-auto">
+        <footer className="w-full grid grid-cols-2 md:grid-cols-3 items-center py-6 md:py-8 text-subtext0 font-sans gap-y-4 md:gap-y-0 border-t border-transparent">
+          {/* Left: Theme Switch */}
+          <div className="flex justify-start order-1">
             <Switch
               checked={mode}
               onChange={handleToggle}
-              className={`${mode ? "bg-base" : "bg-base"} ${
-                mode ? "dark:bg-surface0" : "dark:bg-surface0"
-              } relative inline-flex items-center h-6 rounded-full w-11`}
+              className={`${mode ? "bg-surface1" : "bg-surface1"} relative inline-flex items-center h-5 rounded-full w-9 transition-colors focus:outline-none`}
             >
               <span
                 className={`${
-                  mode ? "translate-x-6" : "translate-x-1"
-                } inline-block w-4 h-4 transform ${
-                  mode ? "dark:bg-text" : "bg-text"
-                } rounded-full`}
+                  mode ? "translate-x-5" : "translate-x-1"
+                } inline-block w-3 h-3 transform bg-text rounded-full transition-transform`}
               />
             </Switch>
-            <Modal />
+          </div>
+
+          {/* Center: Copyright */}
+          <div className="flex justify-center order-3 md:order-2 col-span-2 md:col-span-1">
+             <div className="text-[10px] md:text-xs uppercase tracking-[0.2em] opacity-60 font-medium text-center hover:opacity-100 transition-opacity cursor-default">
+              © 2025 Nicholas Alvi S
+            </div>
+          </div>
+
+          {/* Right: Contact */}
+          <div className="flex justify-end order-2 md:order-3">
+             <Modal />
           </div>
         </footer>
       </div>

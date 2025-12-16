@@ -1,138 +1,62 @@
-import axios from "axios"
-import React, { useMemo, useRef, useState } from "react"
-import { FaTint, FaUmbrella, FaWind } from "react-icons/fa"
-import Footer from "./Footer"
-
-const apiURL = "https://api.openweathermap.org/data/2.5/weather"
-const apiKEY = import.meta.env.VITE_API_KEY
+import React from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useWeather } from './hooks/useWeather'
+import Layout from './components/Layout'
+import SearchBar from './components/SearchBar'
+import WeatherCard from './components/WeatherCard'
+import WeatherDetails from './components/WeatherDetails'
+import Modal from './Modal'
 
 const App = () => {
-  const [inputValue, setInputValue] = useState("")
-  const [weather, setWeather] = useState(null)
-  const inputRef = useRef(inputValue)
-
-  const handleInputChange = (e) => setInputValue(e.target.value)
-
-  const capitalizedInput = inputValue.replace(/^\w/, (e) => e.toUpperCase())
-
-  const handleKeyPress = async (e) => {
-    if (e.key !== "Enter") return
-
-    const inputValueCapitalized =
-      inputValue.charAt(0).toUpperCase() + inputValue.slice(1)
-    const apiParams = {
-      q: inputValueCapitalized,
-      units: "metric",
-      appid: apiKEY,
-    }
-
-    try {
-      const res = await axios.get(apiURL, { params: apiParams })
-      setWeather(res.data)
-      if (res.data.cod === "400") setInputValue("")
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
-  const detailData = [
-    {
-      icon: <FaWind />,
-      value: weather?.wind?.speed || "0",
-      metric: "mph",
-    },
-    {
-      icon: <FaUmbrella />,
-      value: weather?.rain?.["1h"] || "0",
-      metric: "mm",
-    },
-    {
-      icon: <FaTint />,
-      value: weather?.main?.humidity || "0",
-      metric: "%",
-    },
-  ]
-
-  const inputStyle = useMemo(
-    () => ({
-      width: `${inputValue.length * 15}px`,
-      transition: "width 0.1s",
-      minWidth: "30px",
-    }),
-    [inputValue]
-  )
-
-  const weatherDescription = useMemo(() => {
-    if (!weather) return "Cloudy"
-    return (
-      ` ${weather.weather[0].description}`.charAt(1).toUpperCase() +
-      `${weather.weather[0].description}`.slice(1)
-    )
-  }, [weather])
+  const { weather, loading, error, fetchWeather } = useWeather()
 
   return (
-    <div className="bg-base text-2xl font-cat text-text flex-col cursor-default">
-      <div className="absolute py-8 left-1/2">
-        <div className="relative -left-1/2 text-center">
-          <span>Weather App </span>
-          <p className="mt-2 text-sm text-overlay0">
-            with{" "}
-            <a className="text-teal" href="https://openweathermap.org/api/">
-              OpenWeatherMap API
-            </a>{" "}
-            &{" "}
-            <a
-              className="text-teal"
-              href="https://github.com/catppuccin/catppuccin"
+    <Layout>
+
+      <div className="flex flex-col items-center justify-center w-full min-h-[60vh] gap-12">
+        <SearchBar onSearch={fetchWeather} isLoading={loading} />
+
+        <AnimatePresence mode="wait">
+          {loading && (
+             <motion.div
+                key="loader"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-teal font-bold text-xl animate-pulse"
+             >
+                Loading...
+             </motion.div>
+          )}
+
+          {error && (
+            <motion.div
+                key="error"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                className="text-red font-bold text-xl bg-red/10 p-4 rounded-xl border border-red/20"
             >
-              Catppuccin
-            </a>
-            's Theme &#9825;
-          </p>
-        </div>
+                {error}
+            </motion.div>
+          )}
+          
+          {weather && !loading && !error && (
+            <motion.div
+                key="weather-content"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center gap-8 w-full"
+            >
+               <WeatherCard weather={weather} />
+               <WeatherDetails weather={weather} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <div className="flex justify-center items-center w-screen h-screen flex-col">
-        <div className="p-8">
-          <h1>
-            Right now in{" "}
-            <input
-              type="text"
-              className="text-2xl font-bold border-b-1 p-0 h-10 text-center border-t-0 rounded-b-none border-r-0 border-l-0 focus:border-teal border-surface0 focus:ring-transparent bg-transparent"
-              ref={inputRef}
-              value={capitalizedInput}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyPress}
-              style={inputStyle}
-            />
-            , It's {weatherDescription}
-          </h1>
-        </div>
-        <div className="flex justify-between items-center gap-16">
-          <img
-            src={
-              weather
-                ? `https://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png`
-                : `https://openweathermap.org/img/wn/02d@2x.png`
-            }
-          />
-          <div className="text-center">
-            <p className="text-8xl">{parseInt(weather?.main?.temp) || "00"}°</p>
-          </div>
-          <div className="flex flex-col gap-y-4">
-            {detailData.map((e, i) => (
-              <div key={i} className="flex gap-2 items-baseline">
-                {e.icon}
-                <p className="text-3xl">
-                  {e.value}
-                  <span className="text-xs text-overlay0"> {e.metric}</span>
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-        <Footer />
-      </div>
-    </div>
+    </Layout>
   )
 }
 
