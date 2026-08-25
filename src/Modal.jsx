@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 
 const Modal = () => {
   const [showModal, setShowModal] = useState(false)
@@ -6,91 +7,115 @@ const Modal = () => {
   const openModal = () => setShowModal(true)
   const closeModal = () => setShowModal(false)
 
+  const inputClasses =
+    "doodle-sm w-full border-2 border-line bg-base/70 px-4 py-3 font-sans text-sm text-ink placeholder:text-faint outline-none transition-all duration-200 focus:border-moss focus:shadow-sketch-sm"
+
   return (
     <>
       <button
-        className="text-xs uppercase tracking-widest text-text hover:text-teal transition-colors flex items-center gap-2 group relative"
+        className="group relative flex items-center gap-1.5 text-xs font-bold uppercase tracking-widest text-muted transition-colors hover:text-ink"
         onClick={openModal}
       >
         <span>Contact</span>
-        <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-teal transition-all duration-300 group-hover:w-full"></span>
+        <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-moss transition-all duration-300 group-hover:w-full" />
       </button>
 
-      {showModal && (
-        <div className="fixed h-screen w-screen overflow-hidden z-[100] top-0 left-0 bottom-0 right-0 backdrop-blur-sm bg-base/50 flex items-center justify-center">
-          <div className="relative mx-4 w-full max-w-2xl bg-base border border-surface2 shadow-2xl rounded-sm p-8 md:p-12 transition-all duration-300">
-            <div className="w-full text-text">
-              <div className="flex justify-between items-start mb-8">
-                  <h2 className="text-4xl font-bold text-text tracking-tight">
-                    Get In Touch
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+            onClick={closeModal}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 16 }}
+              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="doodle relative mx-4 w-full max-w-2xl border-2 border-line bg-raised/95 backdrop-blur-xl p-8 shadow-sketch-lg md:p-12"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="grain-bg grain-abs doodle" aria-hidden />
+              <div className="flex items-start justify-between gap-6">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-[0.25em] text-moss">
+                    Say hello
+                  </p>
+                  <h2 className="mt-2 font-display text-3xl md:text-4xl font-bold tracking-tight text-ink">
+                    Get in touch
                   </h2>
-                  <button 
-                    onClick={closeModal}
-                    className="text-subtext0 hover:text-text transition-colors"
+                </div>
+                <button
+                  onClick={closeModal}
+                  aria-label="Close"
+                  className="doodle-sm grid size-10 shrink-0 place-items-center border-2 border-line text-muted transition-all hover:rotate-90 hover:border-moss hover:text-moss"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="square"
-                      strokeLinejoin="miter"
-                    >
-                      <line x1="18" y1="6" x2="6" y2="18"></line>
-                      <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                  </button>
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
               </div>
 
               <form
                 action="https://formspree.io/f/meqderqp"
                 method="POST"
-                className="flex flex-col gap-6"
+                className="mt-8 flex flex-col gap-5"
               >
-                <p className="text-lg text-subtext0">
-                  Do you have an interesting job opportunity? Want to ask me a
-                  question? Or, just want to connect?
+                <p className="text-sm leading-relaxed text-moss md:text-base">
+                  Have an interesting opportunity, a question, or just want to
+                  connect? Drop a message below.
                 </p>
 
-                <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex flex-col gap-4 md:flex-row">
                   <input
                     required
                     name="name"
                     type="text"
-                    className="flex-1 bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors rounded-none"
-                    placeholder="FULL NAME"
+                    placeholder="Full name"
+                    className={inputClasses}
                   />
-
                   <input
                     required
                     name="email"
                     type="email"
-                    className="flex-1 bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors rounded-none"
-                    placeholder="EMAIL"
+                    placeholder="Email address"
+                    className={inputClasses}
                   />
                 </div>
+
                 <textarea
                   required
                   name="message"
-                  className="w-full bg-transparent border-b border-surface2 p-2 outline-none text-text placeholder:text-surface2 focus:border-teal transition-colors h-32 resize-none rounded-none"
-                  placeholder="MESSAGE"
+                  placeholder="Your message…"
+                  className={`${inputClasses} h-32 resize-none`}
                 />
-                <div className="flex justify-end mt-4">
-                    <button
+
+                <div className="flex justify-end pt-1">
+                  <button
                     type="submit"
-                    className="bg-text text-base px-8 py-3 text-sm uppercase tracking-widest font-bold hover:bg-teal transition-colors"
-                    >
-                    Send Message
-                    </button>
+                    className="doodle-sm -rotate-1 border-2 border-moss bg-moss px-7 py-3 text-sm font-extrabold uppercase tracking-widest text-base shadow-sketch transition-all duration-300 hover:-translate-y-0.5 hover:rotate-0 hover:brightness-110 active:scale-[0.98]"
+                  >
+                    Send message
+                  </button>
                 </div>
               </form>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   )
 }

@@ -1,46 +1,83 @@
-import { useState, useCallback } from "react"
+import { useCallback, useRef, useState } from "react"
 import axios from "axios"
+import {
+  fetchCurrentWeather,
+  searchPlaces,
+} from "../lib/openWeather"
 
-const apiURL = "https://api.openweathermap.org/data/2.5/weather"
-const apiKEY = "512b347a7d7784c6598cae4c38f9846c"
+const STATUS_MESSAGES = {
+  400: "Invalid request. Please check the city name and try again.",
+  401: "API key is invalid or not activated yet. Check your VITE_OWM_API_KEY.",
+  404: "City not found. Try a different spelling, e.g. \"Jakarta, ID\".",
+  429: "Too many requests. Please wait a moment and try again.",
+}
 
 export const useWeather = () => {
   const [weather, setWeather] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const controllerRef = useRef(null)
 
-  const fetchWeather = useCallback(async (city) => {
-    if (!city) return
+  /**
+   * @param {string | {lat: number, lon: number}} target
+   *   A city name string, or coordinates from geocoding suggestions.
+   * @param {"metric" | "imperial"} units
+   */
+  const fetchWeather = useCallback(async (target, units = "metric") => {
+    if (!target) return
+
+    controllerRef.current?.abort()
+    const controller = new AbortController()
+    controllerRef.current = controller
 
     setLoading(true)
     setError(null)
-    setWeather(null)
 
     try {
-      const res = await axios.get(apiURL, {
-        params: {
-          q: city,
-          units: "metric",
-          appid: apiKEY,
-        },
-      })
-      
-      if (res.data.cod && res.data.cod !== 200) {
-          throw new Error(res.data.message || "City not found")
+      let coords = { lat: target.lat, lon: target.lon }
+
+      if (typeof target === "string" || target.lat == null) {
+        const places = await searchPlaces(
+          typeof target === "string" ? target : `${target.name}`,
+          controller.signal
+        )
+        if (!places.length) {
+          throw Object.assign(new Error(), { statusCode: 404 })
+        }
+        coords = { lat: places[0].lat, lon: places[0].lon }
       }
-      
-      setWeather(res.data)
+
+      const data = await fetchCurrentWeather(coords, units, controller.signal)
+      if (!controller.signal.aborted) setWeather(data)
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Failed to fetch weather")
+      if (axios.isCancel(err) || err.code === "ERR_CANCELED") return
+
+      const status =
+        err.statusCode ?? err.response?.status ?? null
+
+      setError({
+        title:
+          status === 404
+            ? "Location not found"
+            : status === 401
+              ? "Unauthorized"
+              : "Something went wrong",
+        message:
+          STATUS_MESSAGES[status] ||
+          (err instanceof TypeError || err.message === "Network Error"
+            ? "Network error. Check your internet connection."
+            : err.message || "Failed to fetch weather data."),
+      })
       setWeather(null)
     } finally {
-      setLoading(false)
+      if (!controller.signal.aborted) setLoading(false)
     }
   }, [])
 
   const clearWeather = useCallback(() => {
-      setWeather(null)
-      setError(null)
+    controllerRef.current?.abort()
+    setWeather(null)
+    setError(null)
   }, [])
 
   return { weather, loading, error, fetchWeather, clearWeather }

@@ -1,3 +1,19 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+dist
+dist-ssr
+build
+.vite
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
 # Logs
 logs
 *.log
@@ -7,19 +23,29 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Test coverage
+coverage
+
+# Local files
 *.local
-.env
 
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
+.history
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# OS generated files
+.DS_Store
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Caches
+.eslintcache
+.stylelintcache
